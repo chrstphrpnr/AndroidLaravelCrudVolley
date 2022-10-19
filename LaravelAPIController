@@ -1,0 +1,63 @@
+//SHOW
+public function index()
+{
+    // $hospital = Hospital::orderBy('id','DESC')->get()->toArray();
+    // return response()->json($hospital, 200);
+
+
+    $hospital  = Hospital::all()->toArray();
+
+    $response[ "data" ] = $hospital;
+
+    $response[ "success" ] = 1 ;
+
+    return response()->json($response);
+
+
+}
+
+
+//CREATE
+public function store(Request $request)
+{
+    $request->validate([
+        'hospital_name' =>'required'
+    ]);
+
+    $hospital = Hospital::create($request->all());
+    return response()->json($hospital, 200);
+
+}
+
+
+//UPDATE
+public function update(Request $request, Hospital $hospital)
+{
+    $request->validate([
+        'hospital_name'=>'required',
+    ]);
+
+
+
+    if(!$hospital){
+        return response()->json('Data not found');
+    }
+    else {
+        $hospital->update($request->all());
+        return response()->json('Data updated successfully');
+    }
+
+}
+
+
+//DELETE
+public function destroy(Hospital $hospital)
+{
+    if(!$hospital){
+        return response()->json('Data Delete Failed');
+    }
+    else {
+        $hospital->delete();
+        return response()->json('Data Deleted success');
+    }
+}
